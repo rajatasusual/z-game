@@ -60,6 +60,8 @@ function getCombinedValue(value) {
 
 // Game move logic
 function move(direction) {
+    let moved = false; // Flag to track if any tiles have moved
+
     const movements = {
         up: () => {
             for (let c = 0; c < boardSize; c++) {
@@ -69,6 +71,7 @@ function move(direction) {
                 }
                 const newColumn = combine(column);
                 for (let r = 0; r < boardSize; r++) {
+                    if (grid[r][c] !== newColumn[r]) moved = true; // Check if a tile moved
                     grid[r][c] = newColumn[r];
                 }
             }
@@ -81,24 +84,33 @@ function move(direction) {
                 }
                 const newColumn = combine(column.reverse());
                 for (let r = 0; r < boardSize; r++) {
+                    if (grid[r][c] !== newColumn[boardSize - 1 - r]) moved = true; // Check if a tile moved
                     grid[r][c] = newColumn[boardSize - 1 - r];
                 }
             }
         },
         left: () => {
             for (let r = 0; r < boardSize; r++) {
-                grid[r] = combine(grid[r]);
+                const newRow = combine(grid[r]);
+                if (grid[r].join() !== newRow.join()) moved = true; // Check if a tile moved
+                grid[r] = newRow;
             }
         },
         right: () => {
             for (let r = 0; r < boardSize; r++) {
-                grid[r] = combine(grid[r].reverse()).reverse();
+                const newRow = combine(grid[r].reverse()).reverse();
+                if (grid[r].join() !== newRow.join()) moved = true; // Check if a tile moved
+                grid[r] = newRow;
             }
         },
     };
 
     movements[direction]();
-    addRandomLetter();
+    if (moved) {
+        addRandomLetter();
+    } else {
+        score -= 1; // Apply penalty if no tiles were moved
+    }
 }
 
 function getScore() {
