@@ -1,3 +1,5 @@
+import { initializeGrid, move, getScore, getGrid, resetGame } from './game.js';
+
 const colors = {
     'A': '#FFA500', // Orange
     'B': '#87CEEB', // Sky blue

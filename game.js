@@ -6,7 +6,6 @@ let score = 0;
 function initializeGrid() {
     grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
     addRandomLetter();
-    addRandomLetter();
 }
 
 // Add a random letter to an empty cell
@@ -125,3 +124,5 @@ function resetGame() {
     score = 0;
     initializeGrid();
 }
+
+export { initializeGrid, addRandomLetter, move, getScore, getGrid, resetGame };
