@@ -77,10 +77,10 @@ function copyGrid(grid) {
 }
 
 // Initialize the game grid
-function initializeGrid() {
+function initializeGrid(newGame = false) {
 
     //check autosave
-    if (localStorage.getItem('grid')) {
+    if (localStorage.getItem('grid') && !newGame) {
         grid = JSON.parse(localStorage.getItem('grid'));
         score = parseInt(localStorage.getItem('score'));
     } else {
@@ -178,12 +178,84 @@ function getCombinedValue(value) {
     return String.fromCharCode(value.charCodeAt(0) + 1); // Move to next letter
 }
 
+// Check if the grid is full and no valid moves are possible
+function isGameOver() {
+    // Check if there are any empty cells
+    if (hasEmptyCells()) return false;
+
+    // Check if any adjacent letters can be combined
+    if (canCombineTiles()) return false;
+
+    // Check if any valid 4-letter words can be formed in rows or columns
+    if (canFormValidWords()) return false;
+
+    // If none of the conditions are true, the game is over
+    return true;
+}
+
+// Function to check for any empty cells
+function hasEmptyCells() {
+    for (let r = 0; r < boardSize; r++) {
+        for (let c = 0; c < boardSize; c++) {
+            if (grid[r][c] === '') {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Function to check if any tiles can be combined
+function canCombineTiles() {
+    for (let r = 0; r < boardSize; r++) {
+        for (let c = 0; c < boardSize; c++) {
+            let currentTile = grid[r][c];
+            
+            // Skip if the tile is empty
+            if (currentTile === '') continue;
+
+            // Check for adjacent tiles that can combine in all directions (up, down, left, right)
+            if (r > 0 && grid[r - 1][c] === currentTile) return true; // Up
+            if (r < boardSize - 1 && grid[r + 1][c] === currentTile) return true; // Down
+            if (c > 0 && grid[r][c - 1] === currentTile) return true; // Left
+            if (c < boardSize - 1 && grid[r][c + 1] === currentTile) return true; // Right
+        }
+    }
+    return false;
+}
+
+// Function to check if any valid 4-letter words can be formed
+function canFormValidWords() {
+    // Check for horizontal words
+    for (let r = 0; r < boardSize; r++) {
+        let horizontalWord = grid[r].join('');
+        if (horizontalWord.length === 4 && dict.has(horizontalWord)) {
+            return true; // Valid word found
+        }
+    }
+
+    // Check for vertical words
+    for (let c = 0; c < boardSize; c++) {
+        let verticalWord = '';
+        for (let r = 0; r < boardSize; r++) {
+            verticalWord += grid[r][c];
+        }
+        if (verticalWord.length === 4 && dict.has(verticalWord)) {
+            return true; // Valid word found
+        }
+    }
+
+    return false;
+}
+
 function cleanTile(r, c) {
     grid[r][c] = '';
 }
 
 // Game move logic
 function move(direction) {
+    if (isGameOver()) return;
+    
     let moved = false; // Flag to track if any tiles have moved
 
     const movements = {
@@ -281,7 +353,7 @@ function getLastDirection() {
 
 function resetGame() {
     score = 0;
-    initializeGrid();
+    initializeGrid(true);
 }
 
-export { initializeGrid, addRandomLetter, move, getLastDirection, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid };
+export { initializeGrid, addRandomLetter, move, getLastDirection, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid, isGameOver };

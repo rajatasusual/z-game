@@ -1,4 +1,4 @@
-import { initializeGrid, move, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, getLastDirection } from './game.js';
+import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, getLastDirection } from './game.js';
 
 const colors = {
     'A': '#FFA500', // Orange
@@ -31,6 +31,7 @@ const colors = {
 
 // Render the grid to the DOM
 function renderGrid(isNew) {
+    // Clear the board
     const board = document.getElementById('board');
     const grid = getGrid();
 
@@ -54,6 +55,25 @@ function renderGrid(isNew) {
     !isNew && glowCells(grid);
 
     updateScoreDisplay();
+
+    if (isGameOver()) {
+        //show game over message
+        const message = document.createElement('div');
+        message.textContent = 'Game Over';
+        message.id = 'game-over';
+        message.style.position = 'absolute';
+        message.style.top = '50%';
+        message.style.left = '50%';
+        message.style.transform = 'translate(-50%, -50%)';
+        message.style.fontSize = '2rem';
+        message.style.color = 'white';
+        message.style.fontWeight = 'bold';
+        message.style.textAlign = 'center';
+        // add a gray background the size of the grid
+        message.style.width = `${getBoardSize()}00%`;
+        message.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        board.appendChild(message);
+    }
 
     setTimeout(() => {
         //clear the tiles that are in indices
