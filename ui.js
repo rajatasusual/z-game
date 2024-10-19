@@ -1,4 +1,4 @@
-import { initializeGrid, move, getScore, getGrid, resetGame } from './game.js';
+import { initializeGrid, move, getScore, getGrid, getPreviousGrid, resetGame } from './game.js';
 
 const colors = {
     'A': '#FFA500', // Orange
@@ -30,17 +30,32 @@ const colors = {
 };
 
 // Render the grid to the DOM
-function renderGrid() {
+function renderGrid(isNew) {
     const board = document.getElementById('board');
-    board.innerHTML = '';
     const grid = getGrid();
-    grid.forEach((row) => {
-        row.forEach((cell) => {
+    board.innerHTML = ''; // Clear the board
+
+    grid.forEach((row, rIdx) => {
+        row.forEach((cell, cIdx) => {
             const tile = createTile(cell);
             board.appendChild(tile);
+
+            // Add animation class if tile moved
+            if (isNew || tileHasMoved(rIdx, cIdx)) {
+                tile.classList.add('moved');
+                setTimeout(() => {
+                    tile.classList.remove('moved');
+                }, 300); // Remove the animation after it's played
+            }
         });
     });
+
     updateScoreDisplay();
+}
+
+function tileHasMoved(rIdx, cIdx) {
+    const previousGrid = getPreviousGrid();
+    return previousGrid[rIdx][cIdx] !== getGrid()[rIdx][cIdx];
 }
 
 // Create a tile element
@@ -97,5 +112,5 @@ window.addEventListener('keydown', handleKeyPress);
 // Initialize the game on page load
 window.onload = () => {
     initializeGrid();
-    renderGrid();
+    renderGrid(true);
 };

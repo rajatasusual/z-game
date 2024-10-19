@@ -1,18 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Z</title>
+    <!-- Include Google Fonts for Material Design -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Link to your Material-styled CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-    <div id="score">Score: 0</div>
-    <div id="board"></div>
+    <div class="game-container">
+        <h1 class="md-title">Z</h1>
+        <div id="score" class="md-card md-score">Score: 0</div>
+        <div id="board" class="md-board"></div>
+
+        <h2 class="md-subtitle">Game Rules</h2>
+        <ul class="md-rules">
+            <li>The goal is to combine letters by sliding them in any direction.</li>
+            <li>Two tiles with the same letter combine into the next letter (e.g., A + A = B).</li>
+            <li>Vowels have orange shades, consonants have distinct colors.</li>
+            <li>Earn points for combining vowels (+2) and incur a penalty for consonants (-1).</li>
+            <li>No movement during a turn results in a -1 point penalty.</li>
+            <li>New letters will appear on the board after a valid move.</li>
+        </ul>
+        <!-- Add a reset button to restart the game -->
+        <button class="md-button" id="reset-game">Reset Game</button>
+    </div>
+
+    <!-- Link to your game logic scripts -->
     <script src="game.js" type="module"></script>
     <script src="ui.js" type="module"></script>
 </body>
-
 </html>

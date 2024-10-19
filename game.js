@@ -2,6 +2,14 @@ const boardSize = 4;
 let grid = [];
 let score = 0;
 
+// Store the current grid state before any move
+let previousGrid = [];
+
+// Function to copy the current grid state
+function copyGrid(grid) {
+    return grid.map(row => [...row]);
+}
+
 // Initialize the game grid
 function initializeGrid() {
     grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
@@ -104,6 +112,8 @@ function move(direction) {
         },
     };
 
+    previousGrid = copyGrid(getGrid()); // Copy the current grid to previousGrid before moving
+
     movements[direction]();
     if (moved) {
         addRandomLetter();
@@ -120,9 +130,13 @@ function getGrid() {
     return grid;
 }
 
+function getPreviousGrid() {
+    return previousGrid;
+}
+
 function resetGame() {
     score = 0;
     initializeGrid();
 }
 
-export { initializeGrid, addRandomLetter, move, getScore, getGrid, resetGame };
+export { initializeGrid, addRandomLetter, move, getScore, getGrid, resetGame , getPreviousGrid, copyGrid};
