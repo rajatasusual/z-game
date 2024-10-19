@@ -6,8 +6,10 @@ const urlsToCache = [
     'http://localhost:5500/styles.css',
     'http://localhost:5500/game.js',
     'http://localhost:5500/ui.js',
+    'http://localhost:5500/dict',
     'http://localhost:5500/manifest.json',
-    'http://localhost:5500/icons/z.png'
+    'http://localhost:5500/icons/z.png',
+    'http://localhost:5500/favicon.ico'
 ];
 
 // Install the service worker and cache files
