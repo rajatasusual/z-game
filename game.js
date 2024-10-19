@@ -1,4 +1,4 @@
-const boardSize = 4;
+const boardSize = 5;
 let grid = [];
 let wordIndices = [];
 let score = 0;
@@ -78,8 +78,15 @@ function copyGrid(grid) {
 
 // Initialize the game grid
 function initializeGrid() {
-    grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
-    addRandomLetter();
+
+    //check autosave
+    if (localStorage.getItem('grid')) {
+        grid = JSON.parse(localStorage.getItem('grid'));
+        score = parseInt(localStorage.getItem('score'));
+    } else {
+        grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
+        addRandomLetter();
+    }
 }
 
 // Add a random letter to an empty cell
@@ -239,6 +246,13 @@ function move(direction) {
     } else {
         score -= 1; // Apply penalty if no tiles were moved
     }
+
+    autoSave();
+}
+
+function autoSave() {
+    localStorage.setItem('grid', JSON.stringify(getGrid()));
+    localStorage.setItem('score', getScore());
 }
 
 function getScore() {
