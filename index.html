@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#6200ea"> <!-- Matches your PWA's theme -->
     <title>Z</title>
     <!-- Include Google Fonts for Material Design -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Link to your Material-styled CSS -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="/manifest.json">
 </head>
+
 <body>
     <div class="game-container">
         <h1 class="md-title">Z</h1>
@@ -29,7 +32,47 @@
     </div>
 
     <!-- Link to your game logic scripts -->
+     <script src="service-worker.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('ServiceWorker registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing on mobile
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+
+            // Show your own custom install prompt (e.g., a button)
+            const installButton = document.getElementById('install-pwa');
+            installButton.style.display = 'block';
+
+            installButton.addEventListener('click', () => {
+                // Show the install prompt
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA installation');
+                    }
+                    deferredPrompt = null;
+                });
+            });
+        });
+    </script>
     <script src="game.js" type="module"></script>
     <script src="ui.js" type="module"></script>
 </body>
+
 </html>

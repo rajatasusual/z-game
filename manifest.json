@@ -1,0 +1,21 @@
+{
+  "name": "Z Tile Game",
+  "short_name": "Z",
+  "description": "A fun tile combination game with alphabets!",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#CCC",
+  "icons": [
+    {
+      "src": "/icons/z.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/z.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
