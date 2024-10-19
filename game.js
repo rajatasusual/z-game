@@ -28,7 +28,8 @@ function addRandomLetter() {
     }
     if (emptyCells.length) {
         const { r, c } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-        grid[r][c] = 'A'; // Start with 'A' or other letters as needed
+        // Assign a random letter from A,B,C to the empty cell
+        grid[r][c] = Math.random() > 0.25 ? 'A' : Math.random() > 0.25 ? 'B' : 'C';
     }
 }
 
