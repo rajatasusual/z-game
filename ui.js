@@ -1,4 +1,4 @@
-import { initializeGrid, move, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, resetGame } from './game.js';
+import { initializeGrid, move, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, getLastDirection } from './game.js';
 
 const colors = {
     'A': '#FFA500', // Orange
@@ -54,6 +54,25 @@ function renderGrid(isNew) {
     !isNew && glowCells(grid);
 
     updateScoreDisplay();
+
+    setTimeout(() => {
+        //clear the tiles that are in indices
+        const wordIndices = getWordIndices();
+        if (!wordIndices.length) return;
+
+        wordIndices.forEach(({ r, c }) => {
+            cleanTile(r, c);
+
+            const tile = board.children[r * getBoardSize() + c];
+            tile.textContent = '';
+            tile.style.backgroundColor = '#f0f0f0';
+        });
+
+        // move the tiles
+        move(getLastDirection());
+
+        setTimeout(renderGrid, 500);
+    }, 500);
 }
 
 function glowCells(grid) {

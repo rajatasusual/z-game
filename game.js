@@ -2,6 +2,7 @@ const boardSize = 4;
 let grid = [];
 let wordIndices = [];
 let score = 0;
+let lastDirection = '';
 
 const TEST = false;
 
@@ -170,6 +171,10 @@ function getCombinedValue(value) {
     return String.fromCharCode(value.charCodeAt(0) + 1); // Move to next letter
 }
 
+function cleanTile(r, c) {
+    grid[r][c] = '';
+}
+
 // Game move logic
 function move(direction) {
     let moved = false; // Flag to track if any tiles have moved
@@ -221,6 +226,7 @@ function move(direction) {
 
     movements[direction]();
     if (moved) {
+        lastDirection = direction;
         const wordPoints = checkWordsAndScore(grid); // Check and score formed words
         if (wordPoints > 0) {
             console.log(`Points earned from words: ${wordPoints}`);
@@ -255,9 +261,13 @@ function getWordIndices() {
     return wordIndices;
 }
 
+function getLastDirection() {
+    return lastDirection;
+}
+
 function resetGame() {
     score = 0;
     initializeGrid();
 }
 
-export { initializeGrid, addRandomLetter, move, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid };
+export { initializeGrid, addRandomLetter, move, getLastDirection, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid };
