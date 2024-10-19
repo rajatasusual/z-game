@@ -1,4 +1,4 @@
-import { initializeGrid, move, getScore, getGrid, getPreviousGrid, resetGame } from './game.js';
+import { initializeGrid, move, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, resetGame } from './game.js';
 
 const colors = {
     'A': '#FFA500', // Orange
@@ -33,6 +33,7 @@ const colors = {
 function renderGrid(isNew) {
     const board = document.getElementById('board');
     const grid = getGrid();
+
     board.innerHTML = ''; // Clear the board
 
     grid.forEach((row, rIdx) => {
@@ -50,7 +51,27 @@ function renderGrid(isNew) {
         });
     });
 
+    !isNew && glowCells(grid);
+
     updateScoreDisplay();
+}
+
+function glowCells(grid) {
+    const indices = getWordIndices();
+    const board = document.getElementById('board');
+    const boardSize = getBoardSize();
+
+    grid.forEach((row, rIdx) => {
+        row.forEach((cell, cIdx) => {
+            if (indices.some(({ r, c }) => r === rIdx && c === cIdx)) {
+                const tile = board.children[rIdx * boardSize + cIdx];
+                tile.classList.add('glow');
+                setTimeout(() => {
+                    tile.classList.remove('glow');
+                }, 300); // Remove the animation after it's played
+            }
+        });
+    });
 }
 
 function tileHasMoved(rIdx, cIdx) {

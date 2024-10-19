@@ -86,6 +86,37 @@ body {
     aspect-ratio: 1 / 1; /* Ensure the tile's height and width are always equal */
 }
 
+/* Define the glowing animation */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 255, 0, 1);
+    }
+    100% {
+        box-shadow: 0 0 10px rgba(255, 255, 0, 1);
+    }
+}
+
+/* Class that applies the glowing effect */
+.glow {
+    animation: glow 2s ease-in-out;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.5s forwards; /* Fade out over 0.5 seconds */
+}
+
 /* Responsive adjustments to ensure grid fits smaller screens */
 @media (max-width: 600px) {
     .md-board {
