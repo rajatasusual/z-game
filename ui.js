@@ -109,6 +109,60 @@ function handleKeyPress(event) {
 // Event listener for key presses
 window.addEventListener('keydown', handleKeyPress);
 
+
+let startX, startY, endX, endY;
+const threshold = 30; // Minimum swipe distance to detect a valid swipe
+
+// Function to handle touch start event
+function handleTouchStart(event) {
+    startX = event.touches[0].clientX;
+    startY = event.touches[0].clientY;
+}
+
+// Function to handle touch move event and prevent default scrolling
+function handleTouchMove(event) {
+    event.preventDefault(); // Prevent the page from scrolling
+    endX = event.touches[0].clientX;
+    endY = event.touches[0].clientY;
+}
+
+// Function to handle the touch end event and determine swipe direction
+function handleTouchEnd() {
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+
+    // Check if the swipe distance is greater than the threshold to be considered a valid swipe
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+        // Horizontal swipe
+        if (deltaX > 0) {
+            move('right'); // Swipe right
+        } else {
+            move('left'); // Swipe left
+        }
+    } else if (Math.abs(deltaY) > threshold) {
+        // Vertical swipe
+        if (deltaY > 0) {
+            move('down') // Swipe down
+        } else {
+            move('up'); // Swipe up
+        }
+    }
+
+    renderGrid();
+}
+
+// Add event listeners for touch gestures to the board element
+const board = document.getElementById('board');
+board.addEventListener('touchstart', handleTouchStart, false);
+board.addEventListener('touchmove', handleTouchMove, false);
+board.addEventListener('touchend', handleTouchEnd, false);
+
+const resetGameButton = document.getElementById('reset-game');
+resetGameButton.addEventListener('click', () => {
+    resetGame();
+    renderGrid(true);
+});
+
 // Initialize the game on page load
 window.onload = () => {
     initializeGrid();
