@@ -101,6 +101,7 @@ function handleKeyPress(event) {
     };
     const direction = directionMap[event.key];
     if (direction) {
+        event.preventDefault();
         move(direction);
         renderGrid();
     }
