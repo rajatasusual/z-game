@@ -15,7 +15,7 @@
 <body>
     <button id="install-pwa" style="display: none;">Install</button>
     <div class="game-container">
-        <img src="icons/z.png" alt="Z" class="md-logo">
+        <div class="md-logo"></div>
 
         <!-- Score Display -->
         <div id="score" class="md-card md-score">Score: 0</div>
@@ -24,15 +24,25 @@
         <div id="board" class="md-board"></div>
 
         <!-- Reset Game Button -->
-        <div class="md-reset-container">
+        <div class="md-buttons-container">
             <button class="md-button" id="reset-game">Reset</button>
+            <button class="md-button" id="settings-button">
+                <span class="gear-icon">Settings</span>
+            </button>
             <div class="md-confirmation hidden" id="confirmation-box">
                 <span>Are you sure?</span>
                 <button class="md-button" id="confirm-reset">Yes</button>
                 <button class="md-button" id="cancel-reset">Cancel</button>
             </div>
         </div>
-
+        <div class="md-sidebar" id="sidebar">
+            <h3>Settings</h3>
+            Dark Mode<input type="checkbox" id="dark-mode-toggle"/>
+            Animations<input type="checkbox" id="animations-toggle"/>
+            Contrast<input type="checkbox" id="contrast-toggle"/>
+            <button class="md-button" id="close-sidebar">Close</button>
+        </div>
+        
         <!-- Collapsible Game Rules -->
         <details class="md-rules-container">
             <summary class="md-rules-summary">How to Play? 🤔</summary>

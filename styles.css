@@ -1,8 +1,82 @@
-/* Global Styles */
+:root {
+    --background-color: #e6e6dd;
+    --text-color: #444;
+    --card-background: #e0e0e0;
+    --button-color: #fff;
+    --button-background: gray;
+    --button-hover: #3700b3;
+    --tile-background: #f0f0f0;
+    --rule-item-color: #757575;
+    --sidebar-background: #f0f0f0;
+    --logo-url: url('icons/z.png');
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Other styles using the variables */
+.md-card {
+    background-color: var(--card-background);
+}
+
+.md-button {
+    background-color: var(--button-background);
+}
+
+.md-rules-container {
+    background-color: var(--card-background);
+}
+.md-rules li {
+    color: var(--rule-item-color);
+}
+
+.tile {
+    background-color: var(--tile-background);
+}
+
+.md-sidebar {
+    background-color: var(--sidebar-background);
+}
+.md-button {
+    background-color: var(--button-background);
+    color: var(--button-color);
+}
+
+.md-button:hover {
+    background-color: var(--button-hover);
+}
+
+.md-sidebar>input[type="checkbox"] {
+    background: var(--button-background);
+}
+
+.md-sidebar>input[type="checkbox"]:before {
+    background: var(--tile-background);
+}
+
+.md-sidebar>input[type="checkbox"]:checked:before {
+    background: var(--button-hover);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    --background-color: #121212;
+    --text-color: #ffffff;
+    --card-background: #1e1e1e;
+    --button-background: #424242;
+    --button-color: #fff;
+    --button-hover: #6200ea;
+    --tile-background: #333333;
+    --rule-item-color: #bbbbbb;
+    --sidebar-background: #1e1e1e;
+    --logo-url: url('icons/z-dark.png');
+}
+
 body {
     font-family: 'Roboto', sans-serif;
     font-size: calc(16px + 0.5vw); /* Scales dynamically with screen size */
-    background-color: #e6e6dd;
     margin: 0;
     padding: 0;
     display: flex;
@@ -12,9 +86,13 @@ body {
 }
 
 .md-logo {
-    width: 50px;
     height: 50px;
-    padding: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    align-items: center;
+    margin-bottom: 20px;
+    background-image: var(--logo-url);
 }
 
 #install-pwa {
@@ -43,7 +121,6 @@ body {
 .md-rules-container {
     max-width: 600px;
     margin: 20px auto;
-    background-color: #f0f0f0;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -54,7 +131,6 @@ body {
 /* Styling for the summary */
 .md-rules-summary {
     font-size: 1em;
-    color: #444;
     cursor: pointer;
 }
 
@@ -74,7 +150,6 @@ body {
     font-size: 1em;
     padding: 8px 0;
     border-bottom: 1px solid #e0e0e0;
-    color: #757575;
 }
 
 /* Last list item without border */
@@ -84,7 +159,6 @@ body {
 
 /* Material Design Card Style */
 .md-card {
-    background-color: #e0e0e0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 16px;
@@ -94,7 +168,6 @@ body {
 .md-score {
     font-size: 1.5rem;
     font-weight: 500;
-    color: #444;
 }
 
 /* Material Design Board with square tiles */
@@ -106,7 +179,6 @@ body {
     width: 100%;                           /* Full width of container */
     max-width: 400px;                      /* Max size to ensure grid is visible on all screens */
     margin: 0 auto;                        /* Center the grid */
-    background-color: #e0e0e0;
     border-radius: 12px;
     padding: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -120,7 +192,6 @@ body {
     align-items: center;
     font-size: calc(1.2rem + 1vw); /* Dynamic font size based on screen width */
     font-weight: bold;
-    background-color: #f0f0f0;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.2s;
@@ -187,8 +258,6 @@ body {
 
 /* Material Button */
 .md-button {
-    background-color: gray;
-    color: white;
     padding: 15px 30px;
     font-size: 1.2rem;
     border: none;
@@ -203,12 +272,10 @@ body {
 }
 
 .md-button:hover {
-    background-color: #3700b3;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .md-button:active {
-    background-color: #283593;
     box-shadow: none;
 }
 
@@ -223,6 +290,55 @@ body {
 /* Hidden class to toggle visibility */
 .hidden {
     display: none;
+}
+
+/* Sidebar styles */
+.md-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 300px; /* Width for desktop */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    transform: translateX(-100%); /* Initially hidden */
+    transition: transform 0.3s ease;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.md-sidebar.open {
+    transform: translateX(0); /* Show sidebar */
+}
+
+.md-sidebar>input[type="checkbox"] {
+    appearance: none;
+    display: inline-block;
+    width: 36px;
+    height: 14px;
+    outline: none;
+    border-radius: 8px;
+    transition: 0.3s;
+    position: relative;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.md-sidebar>input[type="checkbox"]:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.md-sidebar>input[type="checkbox"]:checked:before {
+    left: 22px;
 }
 
 /* Responsive Layout */
@@ -249,7 +365,6 @@ body {
         top: 20px;
         left: 20px;
         z-index: 999;
-        background-color: rgba(255, 255, 255, 0.8); /* Slight transparency */
         padding: 10px;
         border-radius: 4px;
         font-size: 1rem;
@@ -267,5 +382,16 @@ body {
         font-size: 1rem;
         padding: 12px 24px;
         margin-top: 15px;
+    }
+    .md-sidebar {
+        width: 100%; /* Full width for mobile */
+        height: 300px; /* Height for mobile */
+        bottom: 0; /* Positioned at the bottom */
+        top: auto; /* Reset top */
+        transform: translateY(100%); /* Initially hidden */
+    }
+
+    .md-sidebar.open {
+        transform: translateY(0); /* Show sidebar */
     }
 }

@@ -19,7 +19,7 @@ function renderGrid(isNew) {
             board.appendChild(tile);
 
             // Add animation class if tile moved
-            if (isNew || tileHasMoved(rIdx, cIdx)) {
+            if (isNew || tileHasMoved(rIdx, cIdx) && settings.animations) {
                 tile.classList.add('moved');
                 tile.classList.add('merged');
                 setTimeout(() => {
@@ -101,8 +101,10 @@ function createTile(value) {
     const tile = document.createElement('div');
     tile.className = 'tile';
     tile.textContent = value || '';
-    tile.style.backgroundColor = value ? colors[value] : '#f0f0f0'; // Default background for empty tiles
-    tile.style.color = isDark(colors[value] || '#f0f0f0') ? 'white' : 'black'; // Set text color based on tile color
+    if (value) {
+        tile.style.backgroundColor = colors[value]; // Default background for empty tiles
+        tile.style.color = isDark(colors[value] || '#f0f0f0') ? 'white' : 'black'; // Set text color based on tile color
+    }
     return tile;
 }
 
@@ -196,20 +198,20 @@ board.addEventListener('touchstart', handleTouchStart, false);
 board.addEventListener('touchmove', handleTouchMove, false);
 board.addEventListener('touchend', handleTouchEnd, false);
 
-document.getElementById('reset-game').addEventListener('click', function() {
+document.getElementById('reset-game').addEventListener('click', function () {
     // Show confirmation box
     document.getElementById('confirmation-box').classList.remove('hidden');
     // Hide reset button
     this.classList.add('hidden');
 });
 
-document.getElementById('cancel-reset').addEventListener('click', function() {
+document.getElementById('cancel-reset').addEventListener('click', function () {
     // Hide confirmation box and show reset button
     document.getElementById('confirmation-box').classList.add('hidden');
     document.getElementById('reset-game').classList.remove('hidden');
 });
 
-document.getElementById('confirm-reset').addEventListener('click', function() {
+document.getElementById('confirm-reset').addEventListener('click', function () {
     resetGame();
     renderGrid(true);
 
@@ -217,6 +219,50 @@ document.getElementById('confirm-reset').addEventListener('click', function() {
     document.getElementById('confirmation-box').classList.add('hidden');
     document.getElementById('reset-game').classList.remove('hidden');
 });
+
+document.getElementById('settings-button').addEventListener('click', function () {
+    const sidebar = document.querySelector('.md-sidebar');
+    sidebar.classList.toggle('open');
+});
+
+document.getElementById('close-sidebar').addEventListener('click', function () {
+    const sidebar = document.querySelector('.md-sidebar');
+    sidebar.classList.remove('open');
+});
+
+// Optional: Close the sidebar when clicking outside of it
+document.addEventListener('click', function (event) {
+    const sidebar = document.querySelector('.md-sidebar');
+    const settingsButton = document.getElementById('settings-button');
+
+    if (!sidebar.contains(event.target) && !settingsButton.contains(event.target)) {
+        sidebar.classList.remove('open');
+    }
+});
+
+document.getElementById('contrast-toggle').addEventListener('change', function () {
+    settings.contrast = !settings.contrast;
+    localStorage.setItem('settings', JSON.stringify(settings));
+
+    colors = settings.contrast ? contrastColors : generateAlphabetColors();
+    renderGrid();
+})
+
+document.getElementById('animations-toggle').addEventListener('change', function () {
+    settings.animations = !settings.animations;
+    localStorage.setItem('settings', JSON.stringify(settings));
+})
+
+document.getElementById('dark-mode-toggle').addEventListener('change', function () {
+    settings.darkMode = !settings.darkMode;
+    localStorage.setItem('settings', JSON.stringify(settings));
+
+    document.body.classList.toggle('dark-mode'); // Toggle the dark mode class
+    const elements = document.querySelectorAll('.md-card, .md-rules-container, .md-button, .tile, .md-sidebar'); // Add all elements you want to change
+    elements.forEach(element => {
+        element.classList.toggle('dark-mode'); // Add dark mode class to each element
+    });
+})
 
 // Initialize the game on page load
 window.onload = () => {
