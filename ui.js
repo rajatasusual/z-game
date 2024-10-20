@@ -1,34 +1,5 @@
 import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, getLastDirection } from './game.js';
 
-const colors = {
-    'A': '#FFA500', // Orange
-    'B': '#87CEEB', // Sky blue
-    'C': '#4682B4', // Steel blue
-    'D': '#4169E1', // Royal blue
-    'E': '#FF8C00', // Dark orange
-    'F': '#0000CD', // Medium blue
-    'G': '#00008B', // Dark blue
-    'H': '#000080', // Navy
-    'I': '#FF4500', // Orange red
-    'J': '#1E90FF', // Dodger blue
-    'K': '#00BFFF', // Deep sky blue
-    'L': '#00CED1', // Dark turquoise
-    'M': '#20B2AA', // Light sea green
-    'N': '#3CB371', // Medium sea green
-    'O': '#FF7F50', // Coral
-    'P': '#008000', // Green
-    'Q': '#006400', // Dark green
-    'R': '#B8860B', // Dark goldenrod
-    'S': '#FFD700', // Gold
-    'T': '#FFA500', // Orange
-    'U': '#FF6347', // Tomato
-    'V': '#FF4500', // Orange red
-    'W': '#FF0000', // Red
-    'X': '#B22222', // Firebrick
-    'Y': '#A52A2A', // Brown
-    'Z': '#8B0000', // Dark red
-};
-
 // Render the grid to the DOM
 function renderGrid(isNew) {
     // Clear the board
