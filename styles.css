@@ -16,6 +16,21 @@ body {
     padding: 20px;
 }
 
+#install-pwa {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+}
+
 .game-container {
     max-width: 420px;
     max-height: 100vh;

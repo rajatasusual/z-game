@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <button id="install-pwa" style="display: none;">Install</button>
     <div class="game-container">
         <img src="icons/z.png" alt="Z" class="md-logo">
 
@@ -44,6 +45,7 @@
     </div>
 
     <!-- Link to your game logic scripts -->
+    <script src="init.js"></script>
     <script src="service-worker.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
@@ -83,7 +85,6 @@
             });
         });
     </script>
-    <script src="init.js"></script>
     <script src="game.js" type="module"></script>
     <script src="ui.js" type="module"></script>
 </body>

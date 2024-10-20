@@ -2,18 +2,36 @@
   "name": "Z Tile Game",
   "short_name": "Z",
   "description": "A fun tile combination game with alphabets!",
+  "form_factor": "tall",
   "start_url": "/index.html",
-  "display": "standalone",
+  "id": "/index.html",
+  "display": "fullscreen",
   "background_color": "#f5f5f5",
   "theme_color": "#CCC",
+  "screenshots": [
+    {
+     "src": "icons/tall.png",
+      "sizes": "360x640",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Z Tile Game (Mobile)"
+    },
+    {
+      "src": "icons/wide.png",
+      "sizes": "1200x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Z Tile Game (Tablet)"
+    }
+],
   "icons": [
     {
-      "src": "/icons/z.png",
+      "src": "/icons/z-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/z.png",
+      "src": "/icons/z-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
