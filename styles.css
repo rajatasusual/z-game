@@ -89,8 +89,6 @@ body {
 /* Material Design Board with square tiles */
 .md-board {
     display: grid;
-    grid-template-columns: repeat(5, 1fr); /* 4 equal columns */
-    grid-template-rows: repeat(5, 1fr);    /* 4 equal rows */
     grid-gap: 10px;                        /* Space between tiles */
     width: 100%;                           /* Full width of container */
     max-width: 400px;                      /* Max size to ensure grid is visible on all screens */
@@ -114,6 +112,12 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.2s;
     aspect-ratio: 1 / 1; /* Ensure the tile's height and width are always equal */
+
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 /* Define the glowing animation */

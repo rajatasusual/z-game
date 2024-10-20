@@ -33,6 +33,11 @@ const colors = {
 function renderGrid(isNew) {
     // Clear the board
     const board = document.getElementById('board');
+    if (isNew) {
+        board.style.gridTemplateColumns = `repeat(${getBoardSize()}, 1fr)`;
+        board.style.gridTemplateRows = `repeat(${getBoardSize()}, 1fr)`;
+    }
+
     const grid = getGrid();
 
     board.innerHTML = ''; // Clear the board
@@ -70,7 +75,7 @@ function renderGrid(isNew) {
         message.style.fontWeight = 'bold';
         message.style.textAlign = 'center';
         // add a gray background the size of the grid
-        message.style.width = `${getBoardSize()}00%`;
+        message.style.width = `${board.offsetWidth}px`;
         message.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
         board.appendChild(message);
     }
@@ -115,7 +120,7 @@ function glowCells(grid) {
 
 function tileHasMoved(rIdx, cIdx) {
     const previousGrid = getPreviousGrid();
-    return previousGrid[rIdx][cIdx] !== getGrid()[rIdx][cIdx];
+    return previousGrid.length && previousGrid[rIdx][cIdx] !== getGrid()[rIdx][cIdx];
 }
 
 // Create a tile element

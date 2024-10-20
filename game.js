@@ -1,76 +1,3 @@
-const boardSize = 5;
-let grid = [];
-let wordIndices = [];
-let score = 0;
-let lastDirection = '';
-
-const TEST = false;
-
-let points = {
-    A: 1,
-    B: 3,
-    C: 3,
-    D: 2,
-    E: 1,
-    F: 4,
-    G: 2,
-    H: 4,
-    I: 1,
-    J: 8,
-    K: 5,
-    L: 1,
-    M: 3,
-    N: 1,
-    O: 1,
-    P: 3,
-    Q: 10,
-    R: 1,
-    S: 1,
-    T: 1,
-    U: 1,
-    V: 4,
-    W: 4,
-    X: 8,
-    Y: 4,
-    Z: 10
-};
-
-let dict = new Set();
-
-function generateCombinations(letters, length, current = '', results = []) {
-    // Base case: if the current combination reaches the desired length
-    if (current.length === length) {
-        results.push(current);
-        return;
-    }
-
-    // Iterate through each letter and append it to the current combination
-    for (let letter of letters) {
-        generateCombinations(letters, length, current + letter, results);
-    }
-
-    return results;
-}
-
-fetch("dict")
-    .then((res) => res.text())
-    .then((text) => {
-        if (TEST) {
-
-            const letters = ['A', 'B', 'C', 'D', 'E'];
-            const combinations = generateCombinations(letters, 4);
-
-            dict = new Set(combinations);
-
-        } else {
-            dict = new Set(text.split('\n'));
-        }
-    })
-    .catch((e) => console.error(e));
-
-// Store the current grid state before any move
-let previousGrid = [];
-
 // Function to copy the current grid state
 function copyGrid(grid) {
     return grid.map(row => [...row]);
@@ -78,7 +5,10 @@ function copyGrid(grid) {
 
 // Initialize the game grid
 function initializeGrid(newGame = false) {
-
+    if(TEST && SIMULATE_GAMEOVER) {
+        simulateGameOver();
+        return;
+    }
     //check autosave
     if (localStorage.getItem('grid') && !newGame) {
         grid = JSON.parse(localStorage.getItem('grid'));

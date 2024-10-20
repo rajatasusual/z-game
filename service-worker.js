@@ -1,15 +1,15 @@
 const CACHE_NAME = 'z-tile-game-cache-v1';
 const urlsToCache = [
-    '/',
-    'http://localhost:5500/index.html',
-    'http://localhost:5500/service-worker.js',
-    'http://localhost:5500/styles.css',
-    'http://localhost:5500/game.js',
-    'http://localhost:5500/ui.js',
-    'http://localhost:5500/dict',
-    'http://localhost:5500/manifest.json',
-    'http://localhost:5500/icons/z.png',
-    'http://localhost:5500/favicon.ico'
+    `${URL}/index.html`,
+    `${URL}/service-worker.js`,
+    `${URL}/styles.css`,
+    `${URL}/game.js`,
+    `${URL}/ui.js`,
+    `${URL}/dict`,
+    `${URL}/manifest.json`,
+    `${URL}/icons/z.png`,
+    `${URL}/favicon.ico`,
+    `${URL}/init.js`,
 ];
 
 // Install the service worker and cache files
