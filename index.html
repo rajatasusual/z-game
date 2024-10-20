@@ -23,10 +23,19 @@
         <!-- Game Board -->
         <div id="board" class="md-board"></div>
 
+        <!-- Reset Game Button -->
+        <div class="md-reset-container">
+            <button class="md-button" id="reset-game">Reset</button>
+            <div class="md-confirmation hidden" id="confirmation-box">
+                <span>Are you sure?</span>
+                <button class="md-button" id="confirm-reset">Yes</button>
+                <button class="md-button" id="cancel-reset">Cancel</button>
+            </div>
+        </div>
+
         <!-- Collapsible Game Rules -->
-        <h2 class="md-subtitle">Game Rules</h2>
         <details class="md-rules-container">
-            <summary class="md-rules-summary">View Game Rules</summary>
+            <summary class="md-rules-summary">How to Play? 🤔</summary>
             <ul class="md-rules">
                 <li>The goal is to combine letters by sliding them in any direction.</li>
                 <li>Two tiles with the same letter combine into the next letter (e.g., A + A = B).</li>
@@ -40,8 +49,6 @@
             </ul>
         </details>
 
-        <!-- Reset Game Button -->
-        <button class="md-button" id="reset-game">Reset Game</button>
     </div>
 
     <!-- Link to your game logic scripts -->

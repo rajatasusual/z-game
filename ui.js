@@ -21,8 +21,10 @@ function renderGrid(isNew) {
             // Add animation class if tile moved
             if (isNew || tileHasMoved(rIdx, cIdx)) {
                 tile.classList.add('moved');
+                tile.classList.add('merged');
                 setTimeout(() => {
                     tile.classList.remove('moved');
+                    tile.classList.remove('merged');
                 }, 300); // Remove the animation after it's played
             }
         });
@@ -194,10 +196,26 @@ board.addEventListener('touchstart', handleTouchStart, false);
 board.addEventListener('touchmove', handleTouchMove, false);
 board.addEventListener('touchend', handleTouchEnd, false);
 
-const resetGameButton = document.getElementById('reset-game');
-resetGameButton.addEventListener('click', () => {
+document.getElementById('reset-game').addEventListener('click', function() {
+    // Show confirmation box
+    document.getElementById('confirmation-box').classList.remove('hidden');
+    // Hide reset button
+    this.classList.add('hidden');
+});
+
+document.getElementById('cancel-reset').addEventListener('click', function() {
+    // Hide confirmation box and show reset button
+    document.getElementById('confirmation-box').classList.add('hidden');
+    document.getElementById('reset-game').classList.remove('hidden');
+});
+
+document.getElementById('confirm-reset').addEventListener('click', function() {
     resetGame();
     renderGrid(true);
+
+    // Hide confirmation box and show reset button again
+    document.getElementById('confirmation-box').classList.add('hidden');
+    document.getElementById('reset-game').classList.remove('hidden');
 });
 
 // Initialize the game on page load
