@@ -2,6 +2,16 @@
 <html lang="en">
 
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-M689D3NT');</script>
+    <!-- End Google Tag Manager -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#6200ea"> <!-- Matches your PWA's theme -->
     <title>Z</title>
@@ -13,6 +23,10 @@
 </head>
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M689D3NT" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <button id="install-pwa" style="display: none;">Install</button>
     <div class="game-container">
         <div class="md-logo"></div>
@@ -37,12 +51,12 @@
         </div>
         <div class="md-sidebar" id="sidebar">
             <h3>Settings</h3>
-            Dark Mode<input type="checkbox" id="dark-mode-toggle"/>
-            Animations<input type="checkbox" id="animations-toggle"/>
-            Contrast<input type="checkbox" id="contrast-toggle"/>
+            Dark Mode<input type="checkbox" id="dark-mode-toggle" />
+            Animations<input type="checkbox" id="animations-toggle" />
+            Contrast<input type="checkbox" id="contrast-toggle" />
             <button class="md-button" id="close-sidebar">Close</button>
         </div>
-        
+
         <!-- Collapsible Game Rules -->
         <details class="md-rules-container">
             <summary class="md-rules-summary">How to Play? 🤔</summary>
