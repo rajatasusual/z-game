@@ -165,7 +165,15 @@ body {
     margin-bottom: 20px;
 }
 
-.md-score {
+.md-score-timer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; /* Space between score and timer */
+    padding: 10px;
+}
+
+.md-score, .md-timer {
     font-size: 1.5rem;
     font-weight: 500;
 }
@@ -360,13 +368,23 @@ body {
         font-size: 0.9em;
     }
 
-    .md-score {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 999;
+    /* Stack score and timer vertically on mobile */
+    .md-score-timer {
+        flex-direction: row; 
         padding: 10px;
-        border-radius: 4px;
+        margin-top: 20px; /* Space from the logo */
+        width: 100%; /* Take full width on mobile */
+    }
+
+    /* Sticky positioning */
+    .md-score-timer {
+        position: sticky;
+        top: 60px; /* Adjust this based on the height of the logo to ensure it's below */
+        z-index: 999; /* Ensure it's above other content */
+        font-size: 1rem;
+    }
+
+    .md-score, .md-timer {
         font-size: 1rem;
     }
     

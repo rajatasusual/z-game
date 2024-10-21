@@ -2,6 +2,7 @@ const boardSize = 5;
 const TEST = false;
 const SIMULATE_GAMEOVER = false;
 const URL = TEST ? 'http://localhost:5500' : 'https://rajatasusual.github.io/z-game';
+const DEFAULT_TIME = 60;
 
 const points = {
     A: 1,
@@ -70,6 +71,9 @@ let dict = new Set();
 
 let colors = [];
 let settings = {};
+
+let timeRemaining = DEFAULT_TIME; // Time in seconds
+let timer;
 
 function interpolateColor(startColor, endColor, steps, step) {
     const start = parseInt(startColor.slice(1), 16);

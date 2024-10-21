@@ -13,8 +13,10 @@ function initializeGrid(newGame = false) {
     if (localStorage.getItem('grid') && !newGame) {
         grid = JSON.parse(localStorage.getItem('grid'));
         score = parseInt(localStorage.getItem('score'));
+        timeRemaining = parseInt(localStorage.getItem('time'));
     } else {
         grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
+        timeRemaining = DEFAULT_TIME;
         addRandomLetter();
     }
 }
@@ -103,9 +105,13 @@ function combine(line) {
 
 // Get combined value and update the score
 function getCombinedValue(value) {
-    const isVowelCombination = 'AEIOU'.includes(value);
-    score += isVowelCombination ? 2 : -1; // Award points for vowels, penalty for consonants
-    return String.fromCharCode(value.charCodeAt(0) + 1); // Move to next letter
+    const newValue = String.fromCharCode(value.charCodeAt(0) + 1); // Move to next letter
+
+    if (points[newValue]) {
+        timeRemaining += points[newValue]; // Adds seconds based on points
+    }
+
+    return newValue;
 }
 
 // Check if the grid is full and no valid moves are possible
@@ -118,6 +124,9 @@ function isGameOver() {
 
     // Check if any valid 4-letter words can be formed in rows or columns
     if (canFormValidWords()) return false;
+
+    // check if timer has run out
+    if (timeRemaining > 0) return false;
 
     // If none of the conditions are true, the game is over
     return true;
@@ -238,7 +247,6 @@ function move(direction) {
         lastDirection = direction;
         const wordPoints = checkWordsAndScore(grid); // Check and score formed words
         if (wordPoints > 0) {
-            console.log(`Points earned from words: ${wordPoints}`);
             score += wordPoints;
         } else {
             wordIndices = []; // Reset wordIndices
@@ -283,7 +291,9 @@ function getLastDirection() {
 
 function resetGame() {
     score = 0;
+    clearInterval(timer);
     initializeGrid(true);
+    timeRemaining = DEFAULT_TIME;
 }
 
 export { initializeGrid, addRandomLetter, move, getLastDirection, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid, isGameOver };

@@ -41,8 +41,11 @@
     <div class="game-container">
         <div class="md-logo"></div>
 
-        <!-- Score Display -->
-        <div id="score" class="md-card md-score">Score: 0</div>
+        <!-- Score & Timer Display -->
+        <div id="score-timer" class="md-score-timer">
+            <div id="score" class="md-card md-score">Score: 0</div>
+            <div id="timer" class="md-card md-timer">Time: 60s</div>
+        </div>
 
         <!-- Game Board -->
         <div id="board" class="md-board"></div>
@@ -74,11 +77,11 @@
                 <li>The goal is to combine letters by sliding them in any direction.</li>
                 <li>Two tiles with the same letter combine into the next letter (e.g., A + A = B).</li>
                 <li>Vowels have orange shades, consonants have distinct colors.</li>
-                <li>Earn points for forming valid 4-letter words based on the Scrabble point system.</li>
-                <li>Earn points for combining vowels (+2) and incur a penalty for consonants (-1).</li>
+                <li>Earn points by forming valid 4-letter words based on the Scrabble point system.</li>
+                <li>Each new letter added to the board grants additional seconds based on its Scrabble point value.</li>
                 <li>No movement during a turn results in a -1 point penalty.</li>
-                <li>New letters will appear on the board after a valid move.</li>
-                <li>Form horizontal or vertical 4-letter words for bonus points.</li>
+                <li>New letters will appear on the board after a valid move, adding time to the clock.</li>
+                <li>Form horizontal or vertical 4-letter words to increase your score. The score is calculated by summing the letter values based on Scrabble points.</li>
                 <li>Matched words will disappear, and the grid will shift to fill the gaps.</li>
             </ul>
         </details>
