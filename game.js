@@ -5,7 +5,7 @@ function copyGrid(grid) {
 
 // Initialize the game grid
 function initializeGrid(newGame = false) {
-    if(TEST && SIMULATE_GAMEOVER) {
+    if (TEST && SIMULATE_GAMEOVER) {
         simulateGameOver();
         return;
     }
@@ -140,7 +140,7 @@ function canCombineTiles() {
     for (let r = 0; r < boardSize; r++) {
         for (let c = 0; c < boardSize; c++) {
             let currentTile = grid[r][c];
-            
+
             // Skip if the tile is empty
             if (currentTile === '') continue;
 
@@ -185,7 +185,7 @@ function cleanTile(r, c) {
 // Game move logic
 function move(direction) {
     if (isGameOver()) return;
-    
+
     let moved = false; // Flag to track if any tiles have moved
 
     const movements = {
@@ -225,7 +225,7 @@ function move(direction) {
         right: () => {
             for (let r = 0; r < boardSize; r++) {
                 const newRow = combine(grid[r].reverse()).reverse();
-                if (grid[r].join() !== newRow.join()) moved = true; // Check if a tile moved
+                if ((grid[r].reverse()).join() !== newRow.join()) moved = true; // Check if a tile moved
                 grid[r] = newRow;
             }
         },
