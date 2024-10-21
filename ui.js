@@ -162,32 +162,45 @@ function handleTouchStart(event) {
 
 // Function to handle touch move event and prevent default scrolling
 function handleTouchMove(event) {
-    event.preventDefault(); // Prevent the page from scrolling
-    endX = event.touches[0].clientX;
-    endY = event.touches[0].clientY;
+    event.preventDefault();
 }
 
 // Function to handle the touch end event and determine swipe direction
-function handleTouchEnd() {
+function handleTouchEnd(event) {
+    endX = event.changedTouches[0].clientX;
+    endY = event.changedTouches[0].clientY;
+
     const deltaX = endX - startX;
     const deltaY = endY - startY;
 
-    // Check if the swipe distance is greater than the threshold to be considered a valid swipe
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
-        // Horizontal swipe
-        if (deltaX > 0) {
-            move('right'); // Swipe right
+    // Calculate absolute distances
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Only consider swipes where the movement is greater than the threshold
+    if (absDeltaX > threshold || absDeltaY > threshold) {
+        if (absDeltaX > absDeltaY) {
+            // Horizontal swipe
+            if (deltaX > 0) {
+                move('right'); // Swipe right
+            } else {
+                move('left'); // Swipe left
+            }
         } else {
-            move('left'); // Swipe left
-        }
-    } else if (Math.abs(deltaY) > threshold) {
-        // Vertical swipe
-        if (deltaY > 0) {
-            move('down') // Swipe down
-        } else {
-            move('up'); // Swipe up
+            // Vertical swipe
+            if (deltaY > 0) {
+                move('down'); // Swipe down
+            } else {
+                move('up'); // Swipe up
+            }
         }
     }
+
+    // Reset the touch positions
+    startX = null;
+    startY = null;
+    endX = null;
+    endY = null;
 
     renderGrid();
 }
