@@ -14,9 +14,11 @@ function initializeGrid(newGame = false) {
         grid = JSON.parse(localStorage.getItem('grid'));
         score = parseInt(localStorage.getItem('score'));
         timeRemaining = parseInt(localStorage.getItem('time'));
+        usedWords = JSON.parse(localStorage.getItem('usedWords'));
     } else {
         grid = Array.from({ length: boardSize }, () => Array(boardSize).fill(''));
         timeRemaining = DEFAULT_TIME;
+        usedWords = [];
         addRandomLetter();
     }
 }
@@ -44,12 +46,15 @@ function checkWordsAndScore(grid) {
     // Check for horizontal words
     for (let r = 0; r < boardSize; r++) {
         let horizontalWord = grid[r].join('');
-        if (horizontalWord.length === 4 && dict.has(horizontalWord)) {
+        if (dict.has(horizontalWord) && usedWords.indexOf(horizontalWord) === -1) {
             totalWordScore += calculateWordScore(horizontalWord);
+            console.log(horizontalWord + ' ' + calculateWordScore(horizontalWord));
 
             for (let c = 0; c < boardSize; c++) {
                 wordIndices.push({ r, c });
             }
+
+            usedWords.push(horizontalWord);
 
         }
     }
@@ -60,12 +65,15 @@ function checkWordsAndScore(grid) {
         for (let r = 0; r < boardSize; r++) {
             verticalWord += grid[r][c];
         }
-        if (verticalWord.length === 4 && dict.has(verticalWord)) {
+        if (dict.has(verticalWord) && usedWords.indexOf(verticalWord) === -1) {
             totalWordScore += calculateWordScore(verticalWord);
+            console.log(verticalWord + ' ' + calculateWordScore(verticalWord));
 
             for (let r = 0; r < boardSize; r++) {
                 wordIndices.push({ r, c });
             }
+
+            usedWords.push(verticalWord);
 
         }
     }
@@ -122,7 +130,7 @@ function isGameOver() {
     // Check if any adjacent letters can be combined
     if (canCombineTiles()) return false;
 
-    // Check if any valid 4-letter words can be formed in rows or columns
+    // Check if any valid words can be formed in rows or columns
     if (canFormValidWords()) return false;
 
     // check if timer has run out
@@ -163,12 +171,12 @@ function canCombineTiles() {
     return false;
 }
 
-// Function to check if any valid 4-letter words can be formed
+// Function to check if any valid words can be formed
 function canFormValidWords() {
     // Check for horizontal words
     for (let r = 0; r < boardSize; r++) {
         let horizontalWord = grid[r].join('');
-        if (horizontalWord.length === 4 && dict.has(horizontalWord)) {
+        if (dict.has(horizontalWord) && usedWords.indexOf(horizontalWord) === -1) {
             return true; // Valid word found
         }
     }
@@ -179,7 +187,7 @@ function canFormValidWords() {
         for (let r = 0; r < boardSize; r++) {
             verticalWord += grid[r][c];
         }
-        if (verticalWord.length === 4 && dict.has(verticalWord)) {
+        if (dict.has(verticalWord) && usedWords.indexOf(verticalWord) === -1) {
             return true; // Valid word found
         }
     }
@@ -263,6 +271,7 @@ function move(direction) {
 function autoSave() {
     localStorage.setItem('grid', JSON.stringify(getGrid()));
     localStorage.setItem('score', getScore());
+    localStorage.setItem('usedWords', JSON.stringify(usedWords));
 }
 
 function getScore() {
@@ -294,6 +303,7 @@ function resetGame() {
     clearInterval(timer);
     initializeGrid(true);
     timeRemaining = DEFAULT_TIME;
+    usedWords = [];
 }
 
 export { initializeGrid, addRandomLetter, move, getLastDirection, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid, isGameOver };

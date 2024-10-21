@@ -63,6 +63,7 @@ const contrastColors = {
 };
 
 let grid = [];
+let usedWords = [];
 let previousGrid = [];
 let wordIndices = [];
 let score = 0;
