@@ -41,6 +41,7 @@ function addRandomLetter() {
 }
 
 function checkWordsAndScore(grid, userPlayed = false) {
+    let foundWords = 0;
     let totalWordScore = 0;
 
     const minWordLength = 3;
@@ -65,8 +66,9 @@ function checkWordsAndScore(grid, userPlayed = false) {
                     }
 
                     if (verticalWord && dict.has(verticalWord) && usedWords.indexOf(verticalWord) === -1) {
+                        foundWords++;
                         totalWordScore += calculateWordScore(verticalWord);
-                        console.log(verticalWord + ' ' + calculateWordScore(verticalWord));
+                        userPlayed && console.log(verticalWord + ' ' + calculateWordScore(verticalWord));
 
                         wordIndices.push(...tempIndices); // Add valid indices
                         userPlayed && usedWords.push(verticalWord); // Mark word as used
@@ -95,8 +97,9 @@ function checkWordsAndScore(grid, userPlayed = false) {
                     }
 
                     if (horizontalWord && dict.has(horizontalWord) && usedWords.indexOf(horizontalWord) === -1) {
+                        foundWords++;
                         totalWordScore += calculateWordScore(horizontalWord);
-                        console.log(horizontalWord + ' ' + calculateWordScore(horizontalWord));
+                        userPlayed && console.log(horizontalWord + ' ' + calculateWordScore(horizontalWord));
 
                         wordIndices.push(...tempIndices); // Add valid indices
                         userPlayed && usedWords.push(horizontalWord); // Mark word as used
@@ -106,7 +109,12 @@ function checkWordsAndScore(grid, userPlayed = false) {
         }
     }
 
-    return totalWordScore;
+    userPlayed && foundWords > 1 && console.log('Multiplier played: ' + foundWords);
+    
+    // Update the multiplier
+    multiplier = foundWords;
+
+    return totalWordScore * foundWords;
 }
 
 function updateWordScore(){
@@ -322,6 +330,9 @@ function getWordIndices() {
     return wordIndices;
 }
 
+function getMultiplier() {
+    return multiplier;
+}
 
 function resetGame() {
     score = 0;
@@ -331,4 +342,4 @@ function resetGame() {
     usedWords = [];
 }
 
-export { initializeGrid, addRandomLetter, move, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, updateWordScore, copyGrid, isGameOver };
+export { initializeGrid, addRandomLetter, move, cleanTile, getScore, getMultiplier,getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, updateWordScore, copyGrid, isGameOver };

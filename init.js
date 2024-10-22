@@ -74,6 +74,7 @@ let settings = {};
 
 let timeRemaining = DEFAULT_TIME; // Time in seconds
 let timer;
+let multiplier = 1;
 
 function interpolateColor(startColor, endColor, steps, step) {
     const start = parseInt(startColor.slice(1), 16);

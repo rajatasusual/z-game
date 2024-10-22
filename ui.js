@@ -1,4 +1,4 @@
-import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, updateWordScore } from './game.js';
+import { initializeGrid, move, isGameOver, getScore, getMultiplier, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, updateWordScore } from './game.js';
 
 // Render the grid to the DOM
 function renderGrid(isNew) {
@@ -30,7 +30,7 @@ function renderGrid(isNew) {
         });
     });
 
-    !isNew && glowCells(grid);
+    !isNew && highlightWordsAndMultiplier(grid);
 
     updateScoreDisplay();
     updateTimerDisplay();
@@ -131,7 +131,15 @@ function showGameOver() {
     board.appendChild(message);
 }
 
-function glowCells(grid) {
+function highlightWordsAndMultiplier(grid) {
+    const multiplier = getMultiplier();
+    if (multiplier > 1) {
+        const logo = document.getElementById('score');
+        logo.classList.add('mutliplier');
+    } else {
+        const logo = document.getElementById('score');
+        logo.classList.remove('mutliplier');
+    }
     const indices = getWordIndices();
     const board = document.getElementById('board');
     const boardSize = getBoardSize();
