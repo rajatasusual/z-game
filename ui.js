@@ -39,24 +39,51 @@ function renderGrid(isNew) {
         showGameOver();
     }
 
-    setTimeout(() => {
-        //clear the tiles that are in indices
-        const wordIndices = getWordIndices();
-        if (!wordIndices.length) return;
+    // Add click event listeners to the tiles in the wordIndices
+    const wordIndices = getWordIndices();
+    wordIndices.forEach(({ r, c }) => {
+        const tile = board.children[r * getBoardSize() + c];
+        tile.addEventListener('click', handleTileClick);
+    });
 
-        wordIndices.forEach(({ r, c }) => {
-            cleanTile(r, c);
+}
 
-            const tile = board.children[r * getBoardSize() + c];
-            tile.textContent = '';
-            tile.style.backgroundColor = '#f0f0f0';
-        });
+// Handle tile click
+function handleTileClick() {
+    executeWordDeletion();
+}
 
-        // move the tiles
-        move(getLastDirection());
+function executeWordDeletion() {
+    const wordIndices = getWordIndices();
 
-        setTimeout(renderGrid, 500);
-    }, 500);
+    if (!wordIndices.length) return;
+
+    // Clear the tiles
+    wordIndices.forEach(({ r, c }) => {
+        cleanTile(r, c);
+
+        const tile = board.children[r * getBoardSize() + c];
+        tile.textContent = '';
+        tile.style.backgroundColor = '#f0f0f0';
+    });
+
+    // Move the tiles based on the last direction
+    move(getLastDirection());
+
+    setTimeout(renderGrid, 500);
+
+    // Cleanup: remove event listeners after execution
+    removeEventListeners();
+}
+
+// Remove event listeners after deletion
+function removeEventListeners() {
+    // Remove tile click listeners
+    const wordIndices = getWordIndices();
+    wordIndices.forEach(({ r, c }) => {
+        const tile = board.children[r * getBoardSize() + c];
+        tile.removeEventListener('click', handleTileClick);
+    });
 }
 
 function startTimer() {
@@ -103,7 +130,7 @@ function glowCells(grid) {
                 tile.classList.add('glow');
                 setTimeout(() => {
                     tile.classList.remove('glow');
-                }, 300); // Remove the animation after it's played
+                }, 1000); // Remove the animation after it's played
             }
         });
     });
@@ -167,6 +194,8 @@ function handleKeyPress(event) {
         event.preventDefault();
         move(direction);
         renderGrid();
+    } else if (event.code === 'Space') {
+        executeWordDeletion();
     }
 }
 
