@@ -43,7 +43,6 @@ function renderGrid(isNew) {
     const wordIndices = getWordIndices();
     wordIndices.forEach(({ r, c }) => {
         const tile = board.children[r * getBoardSize() + c];
-        tile.addEventListener('click', handleTileClick);
         tile.addEventListener('touchend', function (event) {
             const rect = event.target.getBoundingClientRect();
             const x = event.changedTouches[0].pageX - rect.left - rect.width / 2;

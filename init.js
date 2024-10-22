@@ -1,4 +1,4 @@
-const boardSize = 5;
+const boardSize = 6;
 const TEST = false;
 const SIMULATE_GAMEOVER = false;
 const URL = TEST ? 'http://localhost:5500' : 'https://rajatasusual.github.io/z-game';
