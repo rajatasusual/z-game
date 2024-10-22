@@ -91,7 +91,6 @@ body {
     background-repeat: no-repeat;
     background-size: contain;
     align-items: center;
-    margin-bottom: 20px;
     background-image: var(--logo-url);
 }
 
@@ -369,20 +368,15 @@ body {
         font-size: 0.9em;
     }
 
-    /* Stack score and timer vertically on mobile */
-    .md-score-timer {
-        flex-direction: row; 
-        padding: 10px;
-        margin-top: 20px; /* Space from the logo */
-        width: 100%; /* Take full width on mobile */
-    }
-
     /* Sticky positioning */
     .md-score-timer {
         position: sticky;
-        top: 60px; /* Adjust this based on the height of the logo to ensure it's below */
+        top: 10px; /* Adjust this based on the height of the logo to ensure it's below */
         z-index: 999; /* Ensure it's above other content */
         font-size: 1rem;
+        flex-direction: row; 
+        padding: 10px;
+        width: 100%; /* Take full width on mobile */
     }
 
     .md-score, .md-timer {
@@ -392,7 +386,6 @@ body {
     .md-board {
         max-width: 100%;       /* Allow the grid to take up full screen width */
         padding: 5px;          /* Reduce padding for small screens */
-        margin-top: 50px;      /* Move the grid to the top of the screen */
     }
     .tile {
         font-size: 1.2rem;    /* Reduce font size on smaller screens */
