@@ -43,42 +43,70 @@ function addRandomLetter() {
 function checkWordsAndScore(grid) {
     let totalWordScore = 0;
 
-    // Check for horizontal words
-    for (let r = 0; r < boardSize; r++) {
-        let horizontalWord = grid[r].join('');
-        if (dict.has(horizontalWord) && usedWords.indexOf(horizontalWord) === -1) {
-            totalWordScore += calculateWordScore(horizontalWord);
-            console.log(horizontalWord + ' ' + calculateWordScore(horizontalWord));
-
-            for (let c = 0; c < boardSize; c++) {
-                wordIndices.push({ r, c });
-            }
-
-            usedWords.push(horizontalWord);
-
-        }
-    }
+    const minWordLength = 3;
+    const maxWordLength = 5;
 
     // Check for vertical words
     for (let c = 0; c < boardSize; c++) {
-        let verticalWord = '';
-        for (let r = 0; r < boardSize; r++) {
-            verticalWord += grid[r][c];
-        }
-        if (dict.has(verticalWord) && usedWords.indexOf(verticalWord) === -1) {
-            totalWordScore += calculateWordScore(verticalWord);
-            console.log(verticalWord + ' ' + calculateWordScore(verticalWord));
+        for (let start = 0; start <= boardSize - minWordLength; start++) {
+            for (let length = minWordLength; length <= maxWordLength; length++) {
+                if (start + length <= boardSize) {
+                    let verticalWord = '';
+                    const tempIndices = [];
 
-            for (let r = 0; r < boardSize; r++) {
-                wordIndices.push({ r, c });
+                    // Form the vertical word and collect its indices
+                    for (let r = start; r < start + length; r++) {
+                        if (grid[r][c] === '') {
+                            verticalWord = ''; // Reset the word if a blank tile is encountered
+                            break;
+                        }
+                        verticalWord += grid[r][c];
+                        tempIndices.push({ r, c });
+                    }
+
+                    if (verticalWord && dict.has(verticalWord) && usedWords.indexOf(verticalWord) === -1) {
+                        totalWordScore += calculateWordScore(verticalWord);
+                        console.log(verticalWord + ' ' + calculateWordScore(verticalWord));
+
+                        wordIndices.push(...tempIndices); // Add valid indices
+                        usedWords.push(verticalWord); // Mark word as used
+                    }
+                }
             }
-
-            usedWords.push(verticalWord);
-
         }
     }
 
-    return totalWordScore; // You can return it to display points earned from words formed.
+    // Check for horizontal words
+    for (let r = 0; r < boardSize; r++) {
+        for (let start = 0; start <= boardSize - minWordLength; start++) {
+            for (let length = minWordLength; length <= maxWordLength; length++) {
+                if (start + length <= boardSize) {
+                    let horizontalWord = '';
+                    const tempIndices = [];
+
+                    // Form the horizontal word and collect its indices
+                    for (let c = start; c < start + length; c++) {
+                        if (grid[r][c] === '') {
+                            horizontalWord = ''; // Reset the word if a blank tile is encountered
+                            break;
+                        }
+                        horizontalWord += grid[r][c];
+                        tempIndices.push({ r, c });
+                    }
+
+                    if (horizontalWord && dict.has(horizontalWord) && usedWords.indexOf(horizontalWord) === -1) {
+                        totalWordScore += calculateWordScore(horizontalWord);
+                        console.log(horizontalWord + ' ' + calculateWordScore(horizontalWord));
+
+                        wordIndices.push(...tempIndices); // Add valid indices
+                        usedWords.push(horizontalWord); // Mark word as used
+                    }
+                }
+            }
+        }
+    }
+
+    return totalWordScore;
 }
 
 function calculateWordScore(word) {

@@ -204,6 +204,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s, transform 0.2s;
     aspect-ratio: 1 / 1; /* Ensure the tile's height and width are always equal */
+    cursor: pointer;
 
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
