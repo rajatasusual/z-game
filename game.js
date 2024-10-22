@@ -40,7 +40,7 @@ function addRandomLetter() {
     }
 }
 
-function checkWordsAndScore(grid) {
+function checkWordsAndScore(grid, userPlayed = false) {
     let totalWordScore = 0;
 
     const minWordLength = 3;
@@ -69,7 +69,7 @@ function checkWordsAndScore(grid) {
                         console.log(verticalWord + ' ' + calculateWordScore(verticalWord));
 
                         wordIndices.push(...tempIndices); // Add valid indices
-                        usedWords.push(verticalWord); // Mark word as used
+                        userPlayed && usedWords.push(verticalWord); // Mark word as used
                     }
                 }
             }
@@ -99,7 +99,7 @@ function checkWordsAndScore(grid) {
                         console.log(horizontalWord + ' ' + calculateWordScore(horizontalWord));
 
                         wordIndices.push(...tempIndices); // Add valid indices
-                        usedWords.push(horizontalWord); // Mark word as used
+                        userPlayed && usedWords.push(horizontalWord); // Mark word as used
                     }
                 }
             }
@@ -107,6 +107,10 @@ function checkWordsAndScore(grid) {
     }
 
     return totalWordScore;
+}
+
+function updateWordScore(){
+    score += checkWordsAndScore(grid, true);
 }
 
 function calculateWordScore(word) {
@@ -228,7 +232,7 @@ function cleanTile(r, c) {
 }
 
 // Game move logic
-function move(direction) {
+function move(direction, wordDeleted = false) {
     if (isGameOver()) return;
 
     let moved = false; // Flag to track if any tiles have moved
@@ -280,17 +284,13 @@ function move(direction) {
 
     movements[direction]();
     if (moved) {
-        lastDirection = direction;
-        const wordPoints = checkWordsAndScore(grid); // Check and score formed words
-        if (wordPoints > 0) {
-            score += wordPoints;
-        } else {
-            wordIndices = []; // Reset wordIndices
+        const wordPoints = checkWordsAndScore(grid, false);
+        if(wordPoints === 0) {
+            wordIndices = [];
         }
-
         addRandomLetter();
     } else {
-        score -= 1; // Apply penalty if no tiles were moved
+        !wordDeleted && score--; // Apply penalty if no tiles were moved
     }
 
     autoSave();
@@ -322,9 +322,6 @@ function getWordIndices() {
     return wordIndices;
 }
 
-function getLastDirection() {
-    return lastDirection;
-}
 
 function resetGame() {
     score = 0;
@@ -334,4 +331,4 @@ function resetGame() {
     usedWords = [];
 }
 
-export { initializeGrid, addRandomLetter, move, getLastDirection, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, copyGrid, isGameOver };
+export { initializeGrid, addRandomLetter, move, cleanTile, getScore, getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, updateWordScore, copyGrid, isGameOver };

@@ -1,4 +1,4 @@
-import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, getLastDirection } from './game.js';
+import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame } from './game.js';
 
 // Render the grid to the DOM
 function renderGrid(isNew) {
@@ -78,8 +78,8 @@ function executeWordDeletion() {
         tile.style.backgroundColor = '#f0f0f0';
     });
 
-    // Move the tiles based on the last direction
-    move(getLastDirection());
+    // Move the tiles down
+    move("down", true);
 
     setTimeout(renderGrid, 500);
 

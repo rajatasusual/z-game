@@ -67,7 +67,6 @@ let usedWords = [];
 let previousGrid = [];
 let wordIndices = [];
 let score = 0;
-let lastDirection = '';
 let dict = new Set();
 
 let colors = [];
