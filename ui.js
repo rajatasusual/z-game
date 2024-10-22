@@ -1,4 +1,4 @@
-import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame } from './game.js';
+import { initializeGrid, move, isGameOver, getScore, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, updateWordScore } from './game.js';
 
 // Render the grid to the DOM
 function renderGrid(isNew) {
@@ -68,6 +68,9 @@ function executeWordDeletion() {
     const wordIndices = getWordIndices();
 
     if (!wordIndices.length) return;
+
+    updateWordScore();
+    updateScoreDisplay();
 
     // Clear the tiles
     wordIndices.forEach(({ r, c }) => {
