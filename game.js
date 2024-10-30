@@ -35,12 +35,23 @@ function addRandomLetter() {
     }
     if (emptyCells.length) {
         const { r, c } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-        // Assign a random letter from A,B,C to the empty cell
-        grid[r][c] = Math.random() > 0.25 ? 'A' : Math.random() > 0.25 ? 'B' : 'C';
+        if (WEIGHTED)
+            // Select a random letter based on weighted probabilities
+            grid[r][c] = weightedLetters[Math.floor(Math.random() * weightedLetters.length)];
+        else
+            // Assign a random letter from A,B,C to the empty cell
+            grid[r][c] = Math.random() > 0.25 ? 'A' : Math.random() > 0.25 ? 'B' : 'C';
     }
 }
 
-function checkWordsAndScore(grid, userPlayed = false) {
+
+function tileHasMoved(rIdx, cIdx) {
+    const previousGrid = getPreviousGrid();
+    return previousGrid.length && previousGrid[rIdx][cIdx] !== getGrid()[rIdx][cIdx];
+}
+
+
+function checkWordsAndScore(userPlayed = false) {
     let foundWords = 0;
     let totalWordScore = 0;
 
@@ -110,15 +121,49 @@ function checkWordsAndScore(grid, userPlayed = false) {
     }
 
     userPlayed && foundWords > 1 && console.log('Multiplier played: ' + foundWords);
-    
+
     // Update the multiplier
     multiplier = foundWords;
 
     return totalWordScore * foundWords;
 }
 
-function updateWordScore(){
-    score += checkWordsAndScore(grid, true);
+
+// Check if selected tiles form a valid word
+function validateWord(letters) {
+    const word = letters.join('');
+    return dict.has(word) && usedWords.indexOf(word) === -1;
+}
+
+//function to add selected tile to selectedTiles
+function selectTile(r, c) {
+    selectedTiles.push({ r, c });
+}
+
+// Finalize the word by removing the tiles from the grid
+function finalizeWord() {
+    const word = selectedTiles.map(tile => grid[tile.r][tile.c]).join('');
+
+    score += calculateWordScore(word);
+    selectedTiles.forEach(tile => {
+        grid[tile.r][tile.c] = '';
+    });
+    selectedTiles = [];
+
+    usedWords.push(word);
+
+    resetWordIndices(true);
+    autoSave();
+}
+
+//Penalize the word by deducting score for each letter
+function penalizeWord() {
+    const word = selectedTiles.map(tile => grid[tile.r][tile.c]).join('');
+
+    score -= calculateWordScore(word);
+    selectedTiles = [];
+
+    autoSave();
 }
 
 function calculateWordScore(word) {
@@ -235,13 +280,11 @@ function canFormValidWords() {
     return false;
 }
 
-function cleanTile(r, c) {
-    grid[r][c] = '';
-}
-
 // Game move logic
 function move(direction, wordDeleted = false) {
     if (isGameOver()) return;
+
+    selectedTiles = [];
 
     let moved = false; // Flag to track if any tiles have moved
 
@@ -291,18 +334,25 @@ function move(direction, wordDeleted = false) {
     previousGrid = copyGrid(getGrid()); // Copy the current grid to previousGrid before moving
 
     movements[direction]();
-    if (moved) {
-        const wordPoints = checkWordsAndScore(grid, false);
-        if(wordPoints === 0) {
-            wordIndices = [];
-        }
-        addRandomLetter();
-    } else {
+    if (!moved) {
         !wordDeleted && score--; // Apply penalty if no tiles were moved
     }
 
+    resetWordIndices(false);
+
     autoSave();
 }
+
+function resetWordIndices(userPlayed = false) {
+    wordIndices = [];
+    const wordPoints = checkWordsAndScore(userPlayed);
+    if (userPlayed && wordPoints > 0) {
+        score += wordPoints;
+    }
+
+    addRandomLetter();
+}
+
 
 function autoSave() {
     localStorage.setItem('grid', JSON.stringify(getGrid()));
@@ -330,6 +380,10 @@ function getWordIndices() {
     return wordIndices;
 }
 
+function getSelectedTiles() {
+    return selectedTiles;
+}
+
 function getMultiplier() {
     return multiplier;
 }
@@ -340,6 +394,7 @@ function resetGame() {
     initializeGrid(true);
     timeRemaining = DEFAULT_TIME;
     usedWords = [];
+    selectedTiles = [];
 }
 
-export { initializeGrid, addRandomLetter, move, cleanTile, getScore, getMultiplier,getGrid, getBoardSize, resetGame, getPreviousGrid, getWordIndices, updateWordScore, copyGrid, isGameOver };
+export { initializeGrid, move, getScore, getMultiplier, getGrid, getBoardSize, resetGame, getWordIndices, getSelectedTiles, tileHasMoved, validateWord, selectTile, finalizeWord, penalizeWord, isGameOver };

@@ -1,6 +1,7 @@
 const boardSize = 6;
 const TEST = false;
 const SIMULATE_GAMEOVER = false;
+const WEIGHTED = false;
 const URL = TEST ? 'http://localhost:5500' : 'https://rajatasusual.github.io/z-game';
 const DEFAULT_TIME = 60;
 
@@ -32,6 +33,21 @@ const points = {
     Y: 4,
     Z: 10
 };
+
+// Generate a weighted pool of letters based on inverse score probabilities
+const generateWeightedLetterPool = (points) => {
+    const weightedLetters = [];
+    for (const letter in points) {
+        // Calculate weight inversely proportional to the letter's point value
+        const weight = 12 - points[letter]; // Adjust the constant (e.g., 12) to fine-tune frequencies
+        for (let i = 0; i < weight; i++) {
+            weightedLetters.push(letter);
+        }
+    }
+    return weightedLetters;
+};
+
+const weightedLetters = generateWeightedLetterPool(points);
 
 const contrastColors = {
     'A': '#FFA500', // Orange
@@ -75,6 +91,7 @@ let settings = {};
 let timeRemaining = DEFAULT_TIME; // Time in seconds
 let timer;
 let multiplier = 1;
+let selectedTiles = []; // Track currently clicked tiles in order
 
 function interpolateColor(startColor, endColor, steps, step) {
     const start = parseInt(startColor.slice(1), 16);

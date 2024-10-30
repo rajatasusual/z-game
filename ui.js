@@ -1,4 +1,4 @@
-import { initializeGrid, move, isGameOver, getScore, getMultiplier, getGrid, getBoardSize, getPreviousGrid, getWordIndices, cleanTile, resetGame, updateWordScore } from './game.js';
+import { initializeGrid, move, isGameOver, getScore, getMultiplier, getGrid, getBoardSize, getWordIndices, getSelectedTiles, tileHasMoved, validateWord, resetGame, finalizeWord, penalizeWord, selectTile } from './game.js';
 
 // Render the grid to the DOM
 function renderGrid(isNew) {
@@ -12,6 +12,8 @@ function renderGrid(isNew) {
     const grid = getGrid();
 
     board.innerHTML = ''; // Clear the board
+
+    const selectedTiles = getSelectedTiles();
 
     grid.forEach((row, rIdx) => {
         row.forEach((cell, cIdx) => {
@@ -27,6 +29,28 @@ function renderGrid(isNew) {
                     tile.classList.remove('merged');
                 }, 300); // Remove the animation after it's played
             }
+
+            if (cell !== '') {
+                tile.onclick = () => {
+                    handleTileClick(rIdx, cIdx);
+                };
+                tile.addEventListener('touchend', function (event) {
+                    event.preventDefault();
+                    const rect = event.target.getBoundingClientRect();
+                    const x = event.changedTouches[0].pageX - rect.left - rect.width / 2;
+                    const y = event.changedTouches[0].pageY - rect.top - rect.height / 2;
+                    const distance = Math.sqrt(x * x + y * y);
+
+                    if (distance < 30) {
+                        handleTileClick(rIdx, cIdx);
+                    }
+                });
+            }
+
+            if (selectedTiles.some(t => t.r === rIdx && t.c === cIdx)) {
+                tile.classList.add('glow'); // Highlight if selected
+            }
+            board.appendChild(tile);
         });
     });
 
@@ -39,65 +63,55 @@ function renderGrid(isNew) {
         showGameOver();
     }
 
-    // Add click event listeners to the tiles in the wordIndices
-    const wordIndices = getWordIndices();
-    wordIndices.forEach(({ r, c }) => {
-        const tile = board.children[r * getBoardSize() + c];
-        tile.addEventListener('touchend', function (event) {
-            const rect = event.target.getBoundingClientRect();
-            const x = event.changedTouches[0].pageX - rect.left - rect.width / 2;
-            const y = event.changedTouches[0].pageY - rect.top - rect.height / 2;
-            const distance = Math.sqrt(x * x + y * y);
-
-            if (distance < 30) {
-                handleTileClick();
-            }
-        });
-
-    });
-
 }
 
-// Handle tile click
-function handleTileClick() {
-    executeWordDeletion();
+function handleTileClick(r, c) {
+    const selectedTiles = getSelectedTiles();
+
+    const isSelected = selectedTiles.some(tile => tile.r === r && tile.c === c);
+
+    if (isSelected) {
+        // If re-clicked, check if it's a valid word and clear tiles if so
+        if (validateWord(selectedTiles.map(tile => grid[tile.r][tile.c]))) {
+            finalizeWord();
+            renderGrid();
+        } else {
+            // Clear selection if re-clicked but invalid
+            clearSelection();
+            penalizeWord();
+            updateScoreDisplay(true);
+        }
+    } else {
+        // If not selected, add to selection and highlight
+        selectTile(r, c);
+        highlightSelectedLetters();
+    }
 }
 
-function executeWordDeletion() {
-    const wordIndices = getWordIndices();
 
-    if (!wordIndices.length) return;
+// Highlight valid word tiles if possible
+function highlightSelectedLetters(remove = false) {
+    const boardSize = getBoardSize();
 
-    updateWordScore();
-    updateScoreDisplay();
+    const selectedTiles = getSelectedTiles();
 
-    // Clear the tiles
-    wordIndices.forEach(({ r, c }) => {
-        cleanTile(r, c);
-
-        const tile = board.children[r * getBoardSize() + c];
-        tile.textContent = '';
-        tile.style.backgroundColor = '#f0f0f0';
-    });
-
-    // Move the tiles down
-    move("down", true);
-
-    setTimeout(renderGrid, 500);
-
-    // Cleanup: remove event listeners after execution
-    removeEventListeners();
-}
-
-// Remove event listeners after deletion
-function removeEventListeners() {
-    // Remove tile click listeners
-    const wordIndices = getWordIndices();
-    wordIndices.forEach(({ r, c }) => {
-        const tile = board.children[r * getBoardSize() + c];
-        tile.removeEventListener('click', handleTileClick);
+    selectedTiles.forEach(tile => {
+        const element = document.querySelector(
+            `#board .tile:nth-child(${tile.r * boardSize + tile.c + 1})`
+        );
+        if (remove) {
+            element.classList.remove('glow');
+        } else {
+            element.classList.add('glow');
+        }
     });
 }
+
+// Clear current tile selection and remove highlights
+function clearSelection() {
+    highlightSelectedLetters(true);
+}
+
 
 function startTimer() {
     timer = setInterval(() => {
@@ -157,11 +171,6 @@ function highlightWordsAndMultiplier(grid) {
     });
 }
 
-function tileHasMoved(rIdx, cIdx) {
-    const previousGrid = getPreviousGrid();
-    return previousGrid.length && previousGrid[rIdx][cIdx] !== getGrid()[rIdx][cIdx];
-}
-
 // Create a tile element
 function createTile(value) {
     const tile = document.createElement('div');
@@ -193,8 +202,17 @@ function hexToRgb(hex) {
 }
 
 // Update score display
-function updateScoreDisplay() {
-    document.getElementById('score').textContent = `Score: ${getScore()}`;
+function updateScoreDisplay(penalize = false) {
+    const score = document.getElementById('score');
+    score.textContent = `Score: ${getScore()}`;
+
+    if (score.classList.contains('penalty')) {
+        score.classList.remove('penalty');
+    }
+    //if penalize is true, check if score element already has penalty class, then remove and add it again. Else check if the penalty class is present, then remove it
+    if (penalize) {
+        score.classList.add('penalty');
+    }
 }
 
 function updateTimerDisplay() {
@@ -267,6 +285,8 @@ function handleTouchEnd(event) {
                 move('up'); // Swipe up
             }
         }
+
+        renderGrid();
     }
 
     // Reset the touch positions
@@ -274,8 +294,6 @@ function handleTouchEnd(event) {
     startY = null;
     endX = null;
     endY = null;
-
-    renderGrid();
 }
 
 // Add event listeners for touch gestures to the board element
