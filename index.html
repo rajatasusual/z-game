@@ -95,7 +95,8 @@
 
                     <li><strong>Multiplier Bonus:</strong> Stack up multiple words without clearing them to activate a
                         <strong>multiplier</strong>. The more words stacked, the bigger your score bonus—watch your
-                        score glow as the multiplier kicks in!</li>
+                        score glow as the multiplier kicks in!
+                    </li>
 
                     <li><strong>One-Time Use:</strong> You can only use each word once, so plan your words and moves
                         with foresight!</li>
@@ -149,6 +150,28 @@
                 });
             });
         });
+
+        // Detects if device is on iOS 
+        const isIos = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        }
+        // Detects if device is in standalone mode
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        // Checks if device is on iOS and in standalone mode
+        if (isIos()) {
+            const installButton = document.getElementById('install-pwa');
+            installButton.onclick = () => {
+                alert('You can add this app to your home screen by clicking share > Add to Home Screen');
+            }
+
+            if (isInStandaloneMode()) {
+                installButton.style.display = 'none';
+            } else {
+                installButton.style.display = 'block';
+            }
+        }
     </script>
     <script src="game.js" type="module"></script>
     <script src="ui.js" type="module"></script>
