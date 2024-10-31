@@ -1,8 +1,11 @@
-# Z Tile Game
+# Z Tile Game (**[PLAY HERE!](https://rajatasusual.github.io/z-game/index.html)**)
+
+<img src="https://rajatasusual.github.io/z-game/icons/z-192.png">
 
 Welcome to Z Tile Game, a puzzle game that combines word formation and strategy! Slide and combine letter tiles to create valid words, increase your score, and beat the clock. It’s all about planning, quick thinking, and clever combinations!
 
-[PLAY HERE!](https://rajatasusual.github.io/z-game/index.html)
+
+![Z Tile Game](https://rajatasusual.github.io/z-game/icons/tall.png)
 
 ## Table of Contents
 
