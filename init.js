@@ -189,15 +189,20 @@ function initSettings() {
 }
 
 function simulateGameOver() {
-    if (SIMULATE_GAMEOVER) {
-        grid = [
-            ['A', 'B', 'C', 'D', 'E'],
-            ['F', 'G', 'H', 'I', 'J'],
-            ['K', 'L', 'M', 'N', 'O'],
-            ['P', 'Q', 'R', 'S', 'T'],
-            ['U', 'V', 'W', 'X', 'Y']
-        ];
+    //iterate through all the letters of alphabet and return a boardSize x boardSize board
+
+    const letters = Object.keys(points);
+
+    grid = new Array(boardSize).fill('').map(() => new Array(boardSize).fill(''));
+
+    for (let i = 0; i < boardSize; i++) {
+        for (let j = 0; j < boardSize; j++) {
+            const index = i + j > letters.length - 1 ? i + j - letters.length - 1 : i + j;
+            grid[i][j] = letters[index];
+        }
     }
+
+    return grid;
 }
 
 
@@ -211,7 +216,7 @@ function init() {
             simulateGameOver();
         } else {
             const letters = ['A', 'B', 'C', 'D', 'E'];
-            const combinations = generateCombinations(letters, 4);
+            const combinations = generateCombinations(letters, boardSize);
             dict = new Set(combinations);
         }
 
@@ -225,7 +230,7 @@ function init() {
     }
 
     initSettings();
-    colors = settings.contrast ? contrastColors: generateAlphabetColors();
+    colors = settings.contrast ? contrastColors : generateAlphabetColors();
     settings.darkMode ? document.body.classList.add('dark-mode') : document.body.classList.remove('dark-mode');
 }
 
